@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# Intro to Eventonica
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Welcome to the Eventonica project!
 
-## Available Scripts
+In this project, you'll make a web app to manage events.
 
-In the project directory, you can run:
+You'll work on this project over the next several weeks. The features will remain the same but as you learn more libraries and techniques, you'll integrate those into the app. By the end you'll have built a full-stack web app with React and a database.
 
-### `npm start`
+## Project Requirements
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Technology
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- create-react-app
+- React
+- JavaScript / NodeJs
+- Express
+- SQL
+- Postgres
+- Jest
+- React Testing Library
 
-### `npm test`
+### Events
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Add a new Event
+  - The attributes are up to you. Look through all the features and see what an Event needs
+- Delete an Event
 
-### `npm run build`
+### Search Events
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Search for events by date
+- Search for events by category
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Users
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Add a new User
+- Delete a User
 
-### `npm run eject`
+### Favorite Events
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- A User can **favorite** an Event
+- A User can **unfavorite** an Event
+- A User can view their list of previously favorite events
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Optional Bonus Requirements
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Update existing Event
+- Update existing User
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Assignment Sequence (tentative)
 
-## Learn More
+1. [Setup Eventonica App and Starter Code](./eventonica-setup.md)
+1. [Start React UI](./eventonica-react-ui.md)
+1. [Add Express Backend](./eventonica-express-backend.md)
+1. [Add Postgres Database](./eventonica-postgres.md)
+1. [Testing the Frontend logic with Jest](./eventonica-test-frontend.md)
+1. [Testing the React Components with React Testing library](./eventonica-test-rtl.md)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Optional Assignments
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Eventonica - API Testing with Jest](./eventonica-test-api.md)
+- [Integrate the Ticketmaster API](./ticketmaster-api.md) to allow the user to create events from real data

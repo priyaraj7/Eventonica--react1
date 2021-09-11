@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import DeleteUser from "./DeleteUser";
 
 const Users = () => {
   //variables
@@ -9,15 +10,23 @@ const Users = () => {
   const [users, setUsers] = useState([marlin, nemo, dory]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [id, setId] = useState();
 
   // id, name, and email are states that store what values the user types in those fields
   // users is an array of user objects
   // All of these states can be defined in the component
+
+  //Add new user
   const onSubmit = (e) => {
     e.preventDefault();
     //const newUser = { id: id, name: name, email: email };
-    const newUser = { name, email };
+    const newUser = { name, email, id };
     setUsers([...users, newUser]);
+  };
+  //Delete User
+  const deleteUser = (deleteId) => {
+    const newUsers = users.filter((i) => i.id !== deleteId);
+    setUsers(newUsers);
   };
   return (
     <>
@@ -29,7 +38,8 @@ const Users = () => {
           {/* iterating through users */}
           {users.map((u, i) => (
             <li key={i}>
-              {u.name} and {u.email}
+              <strong>Name</strong>: {u.name} <strong>Email</strong>: {u.email}{" "}
+              <strong>Id</strong>: {u.id}
             </li>
           ))}
         </ul>
@@ -50,7 +60,14 @@ const Users = () => {
                 type="email"
                 id="add-user-email"
                 value={email}
-                onChange={(e) => setName(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <label>User ID</label>
+              <input
+                type="text"
+                id="add-user-id"
+                value={id}
+                onChange={(e) => setId(e.target.value)}
               />
             </fieldset>
             {/* Add more form fields here */}
@@ -58,16 +75,7 @@ const Users = () => {
           </form>
         </div>
 
-        <div>
-          <h3>Delete User</h3>
-          <form id="delete-user" action="#">
-            <fieldset>
-              <label>User ID</label>
-              <input type="text" id="delete-user-id" />
-            </fieldset>
-            <input type="submit" />
-          </form>
-        </div>
+        <DeleteUser deleteUser={deleteUser} />
       </section>
     </>
   );

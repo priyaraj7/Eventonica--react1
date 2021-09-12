@@ -21,6 +21,9 @@ const Users = () => {
     e.preventDefault();
     //const newUser = { id: id, name: name, email: email };
     const newUser = { name, email, id };
+    setName("");
+    setEmail("");
+    setId("");
     setUsers([...users, newUser]);
   };
   //Delete User

@@ -15,7 +15,13 @@ const FindEvent = ({ handleSearchEvent }) => {
         >
           <fieldset>
             <label htmlFor="date-search">Date</label>
-            <input type="text" id="date-search" placeholder="YYYY-MM-DD" />
+            <input
+              type="text"
+              id="date-search"
+              placeholder="YYYY-MM-DD"
+              value={eventDate}
+              onChange={(e) => setEventDate(e.target.value)}
+            />
           </fieldset>
           <fieldset>
             <label htmlFor="category-search">Category</label>

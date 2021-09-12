@@ -1,7 +1,7 @@
 import "./App.css";
 import Header from "./components/Header";
 import Users from "./components/Users";
-import Events from "./components/Event";
+import Events from "./components/Events";
 
 import Footer from "./components/Footer";
 

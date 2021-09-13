@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IoIosHeart, IoIosHeartEmpty } from "react-icons/io";
 
 import EventForm from "./EventForm";
@@ -7,43 +7,60 @@ import FindEvent from "./FindEvent";
 import FavoriteEvent from "./FavoriteEvent";
 
 const Events = () => {
-  // mock State
-  const event1 = {
-    id: "1",
-    name: "Birthday",
-    date: "2021-09-01",
-    description: "A birthday party for my best friend",
-    category: "Celebration",
-  };
-
-  const event2 = {
-    id: "2",
-    name: "Graduation",
-    date: "2021-08-01",
-    description: "The class of 2021 graduates from East High",
-    category: "Education",
-  };
-
-  const event3 = {
-    id: "3",
-    name: "JS Study Session",
-    date: "2021-10-01",
-    description: "A chance to practice Javascript interview questions",
-    category: "Education",
-  };
-  const [events, setEvents] = useState([event1, event2, event3]);
+  const [events, setEvents] = useState([]);
+  // const [name, setName] = useState("");
+  // const [description, setDescription] = useState("");
+  // const [category, setCategory] = useState("");
+  // const [date, setDate] = useState("");
+  // const [id, setId] = useState("");
   const [favoriteEvents, setFavoriteEvents] = useState([]);
   const [toggleFavPage, setToggleFavPage] = useState(false);
 
-  //add event ... this method goes to child -- child to parent update
-  const handleSubmitAddEvent = (newEvent) => {
-    setEvents([...events, newEvent]);
+  //this code is code is to connect express
+  const getEvents = async () => {
+    const response = await fetch("http://localhost:3000/events");
+    const event = await response.json();
+    setEvents(event);
   };
 
-  // delete event
-  const handleDeleteEvent = (deleteId) => {
-    const deleteEvent = events.filter((event) => event.id !== deleteId);
-    setEvents(deleteEvent);
+  useEffect(() => {
+    getEvents(); // useEffect will run getUsers() every time this component loads, as opposed to just the first time it is rendered.
+  }, []);
+
+  // //add event ... this method goes to child -- child to parent update
+  // const handleSubmitAddEvent = (newEvent) => {
+  //   setEvents([...events, newEvent]);
+  // };
+
+  const addEvent = async (newEvent) => {
+    // e.preventDefault();
+    //const newUser = { id: id, name: name, email: email };
+    // const newEvent = { name, date, category, description, id };
+    const rawResponse = await fetch("http://localhost:3000/events", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newEvent),
+    });
+    const content = await rawResponse.json();
+    setEvents([...events, content]);
+  };
+
+  const deleteEvent = async (deleteId) => {
+    const response = await fetch(
+      `http://localhost:3000/events/${deleteId}/delete`,
+      {
+        method: "POST",
+      }
+    );
+    if (response.status !== 200) {
+      alert("delete failed");
+    } else {
+      const updatedEvents = events.filter((i) => i.id !== deleteId);
+      setEvents(updatedEvents);
+    }
   };
 
   //Search Event
@@ -55,6 +72,9 @@ const Events = () => {
     setEvents(findEvent);
   };
 
+  // pass this to FavoriteEvent page
+  //   const handleDeleteFavarite = eve =>{
+  //     events.filter((event) => event.id !== evesetEvents(deleteEvent);
   const handleToggleFavPage = () => {
     setToggleFavPage(!toggleFavPage);
   };
@@ -71,12 +91,6 @@ const Events = () => {
 
     setFavoriteEvents([...favoriteEvents]);
   };
-  // pass this to FavoriteEvent page
-  //   const handleDeleteFavarite = eve =>{
-  //     events.filter((event) => event.id !== evesetEvents(deleteEvent);
-
-  //   }
-
   return (
     <>
       {toggleFavPage ? (
@@ -91,7 +105,6 @@ const Events = () => {
           <div>
             <h3>All Events</h3>
             <ul id="events-list">
-              {/* Display all Events here */}
               {events.map((eve, i) => (
                 <li key={i}>
                   <strong>Name:</strong> {eve.name}
@@ -110,16 +123,16 @@ const Events = () => {
                       style={{ color: "red" }}
                     />
                   )}
+                  <button onClick={() => deleteEvent(eve.id)}>Delete</button>
                 </li>
               ))}
             </ul>
             <button toggleFavPage={toggleFavPage} onClick={handleToggleFavPage}>
               Click here to see favorite event
             </button>
-            <EventForm handleSubmitAddEvent={handleSubmitAddEvent} />
-            <DeleteEvent handleDeleteEvent={handleDeleteEvent} />
+            <EventForm addEvent={addEvent} />
+
             <FindEvent handleSearchEvent={handleSearchEvent} />
-            {/* */}
           </div>
         </section>
       )}

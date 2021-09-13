@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DeleteUser from "./DeleteUser";
+import "./Users.css";
 
 const Users = () => {
   //new code
@@ -57,55 +57,72 @@ const Users = () => {
       setUsers(updatedUsers);
     }
   };
+
+  const renderHeader = () => {
+    let headerElement = ["id", "name", "email"];
+
+    return headerElement.map((key, index) => {
+      return <th key={index}>{key.toUpperCase()}</th>;
+    });
+  };
+  const renderBody = () => {
+    return users.map((u, i) => {
+      return (
+        <tr key={i}>
+          <td>{u.id}</td>
+          <td>{u.name}</td>
+          <td>{u.email}</td>
+
+          <td className="opration">
+            <button onClick={() => deleteUser(u.id)}>Delete</button>
+          </td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <>
       <section className="user-management">
         <h2>User Management</h2>
-
-        <ul id="users-list">
-          {/* display all existing Users here */}
-          {/* iterating through users */}
-          {users.map((u, i) => (
-            <li key={i}>
-              <strong>Name</strong>: {u.name} <strong>Email</strong>: {u.email}{" "}
-              {/* <strong>Id</strong>: {u.id} */}
-              <button onClick={() => deleteUser(u.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-
-        <div>
-          <h3>Add User</h3>
-          <form id="add-user" action="#" onSubmit={addUser}>
-            <fieldset>
-              <label>Name</label>
-              <input
-                type="text"
-                id="add-user-name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <label>Email</label>
-              <input
-                type="email"
-                id="add-user-email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              {/* <label>User ID</label>
-              <input
-                type="text"
-                id="add-user-id"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-              /> */}
-            </fieldset>
-            {/* Add more form fields here */}
-            <input type="submit" value="Add" />
-          </form>
+        <div className="user-flex">
+          <table className="listUser">
+            <h3>List of Users</h3>
+            <table id="users">
+              <thead>
+                <tr>{renderHeader()}</tr>
+              </thead>
+              <tbody>{renderBody()}</tbody>
+            </table>
+          </table>
+          <div>
+            <h3>Add User</h3>
+            <form id="add-user" action="#" onSubmit={addUser}>
+              <fieldset>
+                <label>Name</label>
+                <input
+                  type="text"
+                  id="add-user-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+                <br />
+                <br />
+                <label>Email</label>
+                <input
+                  type="email"
+                  id="add-user-email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <br />
+                <br />
+                <input type="submit" value="Add" />
+              </fieldset>
+              {/* Add more form fields here */}
+            </form>
+          </div>
         </div>
-
-        {/* <DeleteUser deleteUser={deleteUser} /> */}
       </section>
     </>
   );

@@ -1,6 +1,6 @@
 import React, { useReducer } from "react";
 
-const EventForm = ({ handleSubmitAddEvent }) => {
+const EventForm = ({ addEvent }) => {
   const initialState = {
     id: "",
     name: "",
@@ -37,6 +37,9 @@ const EventForm = ({ handleSubmitAddEvent }) => {
       case "editId":
         return { ...state, id: action.payload };
 
+      case "clear":
+        return { ...initialState };
+
       default:
         return state;
     }
@@ -53,7 +56,8 @@ const EventForm = ({ handleSubmitAddEvent }) => {
         action="#"
         onSubmit={(ev) => {
           ev.preventDefault();
-          handleSubmitAddEvent(state);
+          addEvent(state);
+          dispatch({ type: "clear", payload: {} });
         }}
       >
         <fieldset>

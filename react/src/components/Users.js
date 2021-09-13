@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteUser from "./DeleteUser";
 
 const Users = () => {
-  //variables
-  const marlin = { name: "Marlin", email: "marlin@gmail.com", id: "1" };
-  const nemo = { name: "Nemo", email: "nemo@gmail.com", id: "2" };
-  const dory = { name: "Dory", email: "dory@gmail.com", id: "3" };
+  //new code
+  const [users, setUsers] = useState([]);
 
-  const [users, setUsers] = useState([marlin, nemo, dory]);
+  const getUsers = async () => {
+    const response = await fetch("http://localhost:3000/users");
+    const user = await response.json();
+    setUsers(user);
+  };
+
+  useEffect(() => {
+    getUsers(); // useEffect will run getUsers() every time this component loads, as opposed to just the first time it is rendered.
+  }, []);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [id, setId] = useState();
@@ -17,19 +24,38 @@ const Users = () => {
   // All of these states can be defined in the component
 
   //Add new user
-  const onSubmit = (e) => {
+  const addUser = async (e) => {
     e.preventDefault();
     //const newUser = { id: id, name: name, email: email };
-    const newUser = { name, email, id };
+    const newUser = { name, email };
+    const rawResponse = await fetch("http://localhost:3000/users", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newUser),
+    });
+    const content = await rawResponse.json();
     setName("");
     setEmail("");
     setId("");
-    setUsers([...users, newUser]);
+    setUsers([...users, content]);
   };
   //Delete User
-  const deleteUser = (deleteId) => {
-    const newUsers = users.filter((i) => i.id !== deleteId);
-    setUsers(newUsers);
+  const deleteUser = async (deleteId) => {
+    const response = await fetch(
+      `http://localhost:3000/users/${deleteId}/delete`,
+      {
+        method: "POST",
+      }
+    );
+    if (response.status !== 200) {
+      alert("delete failed");
+    } else {
+      const updatedUsers = users.filter((i) => i.id !== deleteId);
+      setUsers(updatedUsers);
+    }
   };
   return (
     <>
@@ -42,14 +68,15 @@ const Users = () => {
           {users.map((u, i) => (
             <li key={i}>
               <strong>Name</strong>: {u.name} <strong>Email</strong>: {u.email}{" "}
-              <strong>Id</strong>: {u.id}
+              {/* <strong>Id</strong>: {u.id} */}
+              <button onClick={() => deleteUser(u.id)}>Delete</button>
             </li>
           ))}
         </ul>
 
         <div>
           <h3>Add User</h3>
-          <form id="add-user" action="#" onSubmit={onSubmit}>
+          <form id="add-user" action="#" onSubmit={addUser}>
             <fieldset>
               <label>Name</label>
               <input
@@ -65,20 +92,20 @@ const Users = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              <label>User ID</label>
+              {/* <label>User ID</label>
               <input
                 type="text"
                 id="add-user-id"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
-              />
+              /> */}
             </fieldset>
             {/* Add more form fields here */}
             <input type="submit" value="Add" />
           </form>
         </div>
 
-        <DeleteUser deleteUser={deleteUser} />
+        {/* <DeleteUser deleteUser={deleteUser} /> */}
       </section>
     </>
   );

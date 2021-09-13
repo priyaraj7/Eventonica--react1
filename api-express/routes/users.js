@@ -1,4 +1,5 @@
 var express = require("express");
+const db = require("../db-connection");
 const { body, validationResult } = require("express-validator");
 const uuid = require("uuid");
 
@@ -11,35 +12,48 @@ let users = [
 ];
 
 /* GET users listing. */
-router.get("/", function (req, res, next) {
-  res.send(users);
+router.get("/", async function (req, res, next) {
+  try {
+    const users = await db.any("SELECT * FROM users", [true]);
+    res.send(users);
+  } catch (e) {
+    console.error("error when running db query", e);
+    res.status(500).statusMessage("DB threw error");
+  }
 });
 
 router.post(
   "/",
   body("name").notEmpty(),
   body("email").isEmail(),
-  function (req, res, next) {
+  async function (req, res, next) {
     // save request data to a variable in routes/users.js
     // Finds the validation errors in this request and wraps them in an object with handy functions
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const user = { id: uuid.v4(), name: req.body.name, email: req.body.email };
-    users.push(user);
-    res.send(user);
+    const user = { name: req.body.name, email: req.body.email };
+    try {
+      const createdUser = await db.one(
+        "INSERT INTO users(name, email) VALUES($1, $2) RETURNING *",
+        [user.name, user.email]
+      );
+      console.log(createdUser);
+      res.send(createdUser);
+    } catch (e) {
+      return res.status(400).json({ e });
+    }
   }
 );
-router.post("/:userId/delete", (req, res, next) => {
+router.post("/:userId/delete", async (req, res, next) => {
   // : acts as a placeholder
   const userId = req.params.userId;
-  const user = users.find((u) => u.id === userId);
-
-  if (!user) {
-    return res.status(404).json({ error: `user ${userId} not found ` });
+  try {
+    await db.none("DELETE FROM users WHERE id=$1", [userId]);
+    return res.send({ status: "success" });
+  } catch (e) {
+    return res.status(400).json({ e });
   }
-  users.splice(users.indexOf(user), 1);
-  return res.send({ status: "success" });
 });
 module.exports = router;
